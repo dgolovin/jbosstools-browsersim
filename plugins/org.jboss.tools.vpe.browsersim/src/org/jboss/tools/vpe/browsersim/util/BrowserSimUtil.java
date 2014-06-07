@@ -13,6 +13,7 @@ package org.jboss.tools.vpe.browsersim.util;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
@@ -286,9 +287,10 @@ public class BrowserSimUtil {
 	}
 	
 	private static void loadJar(File file) {
-		try {
-			URL u = file.toURI().toURL();
 
+			URL u;
+			try {
+				u = file.toURI().toURL();
 			URLClassLoader sysloader = (URLClassLoader) ClassLoader
 					.getSystemClassLoader();
 			@SuppressWarnings("rawtypes")
@@ -297,9 +299,24 @@ public class BrowserSimUtil {
 			Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class }); //$NON-NLS-1$
 			method.setAccessible(true);
 			method.invoke(sysloader, new Object[] { u });
-		} catch (Throwable t) {
-			BrowserSimLogger.logError("Unable to add " + file.getName() + " to classpath.", t); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+			} catch (MalformedURLException e) {
+				BrowserSimLogger.logError("Unable to add " + file.getName() + " to classpath.", t); //$NON-NLS-1$ //$NON-NLS-2$
+			} catch (SecurityException e) {
+				BrowserSimLogger.logError("Unable to add " + file.getName() + " to classpath.", t); //$NON-NLS-1$ //$NON-NLS-2$
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 	}
 	
 	/**
@@ -420,39 +437,14 @@ public class BrowserSimUtil {
 	}
 	
 	public static boolean isLinuxWebkitInstalled() {
-		try {
 			Library.loadLibrary("swt-webkit"); // $NON-NLS-1$
 
-			String webkit2 = System.getenv("SWT_WEBKIT2"); // $NON-NLS-1$
-			final int GTK_VERSION = LinuxUtil.VERSION(LinuxUtil.gtk_major_version(), LinuxUtil.gtk_minor_version(), LinuxUtil.gtk_micro_version());
 
-			final boolean GTK3 = GTK_VERSION >= LinuxUtil.VERSION(3, 0, 0);
-			boolean WEBKIT2 = webkit2 != null && webkit2.equals("1") && GTK3; // $NON-NLS-1$
-			// TODO webkit_check_version() should take care of the following,
-			// but for some
-			// reason this symbol is missing from the latest build. If it is
-			// present in
-			// Linux distro-provided builds then replace the following with this
-			// call.
-			int major, minor, micro;
-			if (WEBKIT2) {
-				major = LinuxUtil.webkit_get_major_version();
-				minor = LinuxUtil.webkit_get_minor_version();
-				micro = LinuxUtil.webkit_get_micro_version();
-			} else {
-				major = LinuxUtil.webkit_major_version();
-				minor = LinuxUtil.webkit_minor_version();
-				micro = LinuxUtil.webkit_micro_version();
-			}
 			final int[] MIN_VERSION = {1, 2, 0};
 			
 			return major > MIN_VERSION[0] ||
 			(major == MIN_VERSION[0] && minor > MIN_VERSION[1]) ||
 			(major == MIN_VERSION[0] && minor == MIN_VERSION[1] && micro >= MIN_VERSION[2]);
-		} catch (Throwable e) {
-			
-		}
-		return false;
 	}
 	
 }
