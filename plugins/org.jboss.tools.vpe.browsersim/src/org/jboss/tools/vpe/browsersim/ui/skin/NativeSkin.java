@@ -42,7 +42,7 @@ import org.jboss.tools.vpe.browsersim.util.BrowserSimUtil;
 /**
  * @author Yahor Radtsevich (yradtsevich)
  */
-public class NativeSkin implements BrowserSimSkin {
+public class NativeSkin extends AbstractSkin {
 	private ProgressBar progressBar;
 	private Label statusLabel;
 	private Text locationText;
@@ -65,11 +65,6 @@ public class NativeSkin implements BrowserSimSkin {
 	public NativeSkin() {
 	}
 
-	@Override
-	public void setBrowserFactory(IBrowserSimBrowserFactory browserFactory) {
-		this.browserFactory = browserFactory;
-	};
-	
 	@Override
 	public void createControls(Display display, Point location, Shell parentShell, boolean javaFx) {
 		if (parentShell == null) {
@@ -353,5 +348,5 @@ public class NativeSkin implements BrowserSimSkin {
 	public boolean automaticallyHideAddressBar() {
 		return false;
 	}
-	
+
 }

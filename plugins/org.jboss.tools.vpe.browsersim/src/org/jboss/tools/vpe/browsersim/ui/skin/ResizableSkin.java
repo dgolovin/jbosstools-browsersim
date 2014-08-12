@@ -33,17 +33,15 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.vpe.browsersim.browser.IBrowser;
-import org.jboss.tools.vpe.browsersim.browser.IBrowserSimBrowserFactory;
 import org.jboss.tools.vpe.browsersim.model.preferences.SpecificPreferences;
 import org.jboss.tools.vpe.browsersim.ui.ControlHandler;
 import org.jboss.tools.vpe.browsersim.util.BrowserSimImageList;
 import org.jboss.tools.vpe.browsersim.util.BrowserSimUtil;
 
-public abstract class ResizableSkin implements BrowserSimSkin {
+public abstract class ResizableSkin extends AbstractSkin implements BrowserSimSkin {
 	protected DeviceComposite deviceComposite;
 	protected ControlHandler controlHandler;
 	
-	private IBrowserSimBrowserFactory browserFactory;
 	private Display display;
 	private Shell shell;
 	private IBrowser browser;
@@ -409,9 +407,5 @@ public abstract class ResizableSkin implements BrowserSimSkin {
 	public void setContextMenu(Menu contextMenu) {
 		deviceComposite.setMenu(contextMenu);
 	}
-	
-	@Override
-	public void setBrowserFactory(IBrowserSimBrowserFactory browserFactory) {
-		this.browserFactory = browserFactory;		
-	}
+
 }

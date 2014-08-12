@@ -130,9 +130,4 @@ public class AppleIPadResizableSkin extends ResizableSkin {
 		super(VISIBLE_REGION_HORIZONTAL, VISIBLE_REGION_VERTICAL, NORMAL_SCREEN_SIZE, NORMAL_SKIN_SIZE);
 	}
 
-	@Override
-	public boolean automaticallyHideAddressBar() {
-		return false;
-	}
-
 }
